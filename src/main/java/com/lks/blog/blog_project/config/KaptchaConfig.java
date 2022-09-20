@@ -1,4 +1,4 @@
-package com.lks.blog.blog_project.util;
+package com.lks.blog.blog_project.config;
 
 import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
