@@ -33,4 +33,13 @@ public class AlphaController {
         response.addCookie(cookie);
         return "set cookie";
     }
+
+    // ajax test
+    @RequestMapping(path = "/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public String testAjax(String name, int age) {
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJsonString(0, "操作成功");
+    }
 }

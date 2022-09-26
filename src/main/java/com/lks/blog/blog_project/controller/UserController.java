@@ -137,4 +137,12 @@ public class UserController {
             return "/site/setting";
         }
     }
+
+    // 个人主页
+    // TODO
+    @LoginRequired
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String  getProfilePage(@PathVariable("userId") int userId, Model model) {
+        return null;
+    }
 }
