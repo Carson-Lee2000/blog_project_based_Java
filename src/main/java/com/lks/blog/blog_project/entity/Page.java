@@ -28,9 +28,9 @@ public class Page {
      */
     public int getTotal() {
         if (rows % limit == 0) {
-            return rows % limit;
+            return rows / limit;
         } else {
-            return rows % limit + 1;
+            return rows / limit + 1;
         }
     }
 

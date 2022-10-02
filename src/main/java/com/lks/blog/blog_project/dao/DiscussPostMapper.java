@@ -16,7 +16,9 @@ public interface DiscussPostMapper {
      * @param limit 一页显示的最大数量
      * @return list of discussPosts
      */
-    List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
+    List<DiscussPost> selectDiscussPosts(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+    // @Param注解用于给参数取别名，只有一个变量可以不加，要是有两个一定要加，所以一般都加上比较保险
+    // sql在<if>里使用,则所有参数必须加别名.
 
     int selectDiscussPostRows(@Param("userId") int userId);
 
@@ -24,7 +26,7 @@ public interface DiscussPostMapper {
     int insertDiscussPost(DiscussPost discussPost);
 
     // 查询帖子详情
-    DiscussPost selectDiscussPostById(int id);
+    DiscussPost selectDiscussPostById(@Param("id") int id);
 
-    int updateCommentCount(int id, int commentCount);
+    int updateCommentCount(@Param("id") int id, @Param("commentCount") int commentCount);
 }
