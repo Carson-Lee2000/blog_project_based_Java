@@ -2,6 +2,7 @@ package com.lks.blog.blog_project.controller;
 
 import com.lks.blog.blog_project.annotation.LoginRequired;
 import com.lks.blog.blog_project.entity.User;
+import com.lks.blog.blog_project.service.LikeService;
 import com.lks.blog.blog_project.service.UserService;
 import com.lks.blog.blog_project.util.CommunityUtil;
 import com.lks.blog.blog_project.util.HostHolder;
@@ -41,11 +42,13 @@ public class UserController {
 
     private final UserService userService;
     private final HostHolder hostHolder;
+    private final LikeService likeService;
 
     @Autowired
-    public UserController(UserService userService, HostHolder hostHolder) {
+    public UserController(UserService userService, HostHolder hostHolder, LikeService likeService) {
         this.userService = userService;
         this.hostHolder = hostHolder;
+        this.likeService = likeService;
     }
 
     @LoginRequired
@@ -143,6 +146,15 @@ public class UserController {
     @LoginRequired
     @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
     public String  getProfilePage(@PathVariable("userId") int userId, Model model) {
-        return null;
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在！");
+        }
+
+        model.addAttribute("user", user);
+        // 获赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+        return "/site/profile";
     }
 }
