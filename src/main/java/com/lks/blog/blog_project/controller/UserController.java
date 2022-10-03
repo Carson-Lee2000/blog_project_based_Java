@@ -2,8 +2,10 @@ package com.lks.blog.blog_project.controller;
 
 import com.lks.blog.blog_project.annotation.LoginRequired;
 import com.lks.blog.blog_project.entity.User;
+import com.lks.blog.blog_project.service.FollowService;
 import com.lks.blog.blog_project.service.LikeService;
 import com.lks.blog.blog_project.service.UserService;
+import com.lks.blog.blog_project.util.CommunityConstant;
 import com.lks.blog.blog_project.util.CommunityUtil;
 import com.lks.blog.blog_project.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +29,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(path = "/user")
-public class UserController {
+public class UserController implements CommunityConstant{
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -43,12 +45,14 @@ public class UserController {
     private final UserService userService;
     private final HostHolder hostHolder;
     private final LikeService likeService;
+    private final FollowService followService;
 
     @Autowired
-    public UserController(UserService userService, HostHolder hostHolder, LikeService likeService) {
+    public UserController(UserService userService, HostHolder hostHolder, LikeService likeService, FollowService followService) {
         this.userService = userService;
         this.hostHolder = hostHolder;
         this.likeService = likeService;
+        this.followService = followService;
     }
 
     @LoginRequired
@@ -155,6 +159,20 @@ public class UserController {
         // 获赞数量
         int likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount", likeCount);
+
+        // 查询当前用户的关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        // 查询当前用户的粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        // 查询当前登录用户是否已经关注打开个人主页的用户
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+            model.addAttribute("hasFollowed", hasFollowed);
+        }
+
         return "/site/profile";
     }
 }
