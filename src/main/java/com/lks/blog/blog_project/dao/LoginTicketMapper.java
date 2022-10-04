@@ -4,6 +4,7 @@ import com.lks.blog.blog_project.entity.LoginTicket;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
 
     /**
